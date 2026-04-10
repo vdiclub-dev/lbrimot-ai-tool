@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brimot - Dashboard devis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<h1>🧹 Devis rapide Brimot</h1>
+
+<label>Surface (m²)</label>
+<input type="number" id="m2">
+
+<label>Type</label>
+<select id="type">
+  <option value="standard">Standard</option>
+  <option value="diogene">Diogène</option>
+  <option value="finbail">Fin de bail</option>
+</select>
+
+<label>Urgence</label>
+<input type="checkbox" id="urgence">
+
+<button onclick="calculer()">Calculer</button>
+
+<h2 id="result"></h2>
+
+<script src="app.js"></script>
+
+</body>
+</html>
