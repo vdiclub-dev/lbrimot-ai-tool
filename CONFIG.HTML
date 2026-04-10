@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Configuration Brimot</title>
+</head>
 
+<body>
+
+<h1>⚙️ Paramètres prix</h1>
+
+<label>Prix heure standard</label>
+<input id="heure_standard" type="number">
+
+<label>Prix m² fin de bail</label>
+<input id="m2_fin_bail" type="number">
+
+<button onclick="saveConfig()">💾 Sauvegarder</button>
+
+<script>
+function saveConfig() {
+  const config = {
+    heure_standard: document.getElementById("heure_standard").value,
+    m2_fin_bail: document.getElementById("m2_fin_bail").value
+  };
+
+  localStorage.setItem("config", JSON.stringify(config));
+
+  alert("Configuration enregistrée !");
+}
+</script>
+
+</body>
+</html>
