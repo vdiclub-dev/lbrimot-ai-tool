@@ -45,11 +45,6 @@
       text-decoration: none;
     }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
     .container {
       width: min(92%, var(--max));
       margin: 0 auto;
@@ -147,13 +142,18 @@
       padding-top: 90px;
     }
 
-    .hero video {
+    .hero-video {
       position: absolute;
       inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-video iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      z-index: 0;
+      pointer-events: none;
+      border: 0;
     }
 
     .hero::before {
@@ -607,9 +607,13 @@
 
   <main id="top">
     <section class="hero">
-      <video autoplay muted loop playsinline poster="cover-colixo.jpg">
-        <source src="video-colixo.mp4" type="video/mp4" />
-      </video>
+      <div class="hero-video">
+        <iframe
+          src="https://www.youtube.com/embed/TzOiwPGw_f4?autoplay=1&mute=1&loop=1&playlist=TzOiwPGw_f4&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0"
+          title="Vidéo Colixo"
+          allow="autoplay; fullscreen">
+        </iframe>
+      </div>
 
       <div class="hero-content">
         <div>
@@ -752,12 +756,12 @@
           <div>
             <h2 style="font-size:clamp(1.8rem,3vw,3rem); letter-spacing:-0.03em; margin-bottom:10px;">Transformez vos expéditions en avantage concurrentiel</h2>
             <p style="color:var(--muted); max-width:62ch;">
-              Avec une vidéo intégrée, un message clair et un formulaire visible, cette page est pensée pour convertir les visiteurs en prospects qualifiés.
+              Une page claire, une vidéo forte et un formulaire simple : tout est pensé pour transformer vos visiteurs en prospects.
             </p>
             <div class="badge-row">
               <span>Service local</span>
               <span>Approche premium</span>
-              <span>Formulaire prêt à l’emploi</span>
+              <span>Réponse rapide</span>
             </div>
           </div>
           <div style="display:flex; justify-content:center; align-items:center;">
@@ -771,35 +775,35 @@
       <div class="container">
         <h2 class="section-title">Demande de devis</h2>
         <p class="section-subtitle">
-          Remplissez le formulaire ci-dessous pour être recontacté. Cette version fonctionne sur GitHub Pages avec un service gratuit de réception d’e-mails.
+          Remplissez le formulaire ci-dessous pour être recontacté.
         </p>
 
         <div class="form-wrap">
           <div class="info-panel">
-            <h3 style="font-size:1.55rem; margin-bottom:10px;">Une page pensée pour convertir</h3>
+            <h3 style="font-size:1.55rem; margin-bottom:10px;">Contact Colixo</h3>
             <p style="color:var(--muted);">
-              Cette landing page utilise une structure simple et efficace : vidéo, proposition de valeur forte, bénéfices clairs et formulaire visible.
+              Une prise de contact simple, rapide et professionnelle pour lancer vos expéditions dans de bonnes conditions.
             </p>
 
             <div class="contact-list">
               <div class="contact-item">
-                <strong style="display:block; color:#fff; margin-bottom:4px;">Étape 1</strong>
-                Remplacez l’adresse e-mail dans le formulaire par votre vraie adresse de réception.
+                <strong style="display:block; color:#fff; margin-bottom:4px;">Email</strong>
+                info@colixo.ch
               </div>
               <div class="contact-item">
-                <strong style="display:block; color:#fff; margin-bottom:4px;">Étape 2</strong>
-                Placez votre vidéo dans le même dossier que ce fichier avec le nom <code style="color:#fff;">video-colixo.mp4</code>.
+                <strong style="display:block; color:#fff; margin-bottom:4px;">Service</strong>
+                Collecte et livraison pour entreprises
               </div>
               <div class="contact-item">
-                <strong style="display:block; color:#fff; margin-bottom:4px;">Étape 3</strong>
-                Hébergez le tout sur GitHub Pages et commencez à envoyer le lien à vos prospects.
+                <strong style="display:block; color:#fff; margin-bottom:4px;">Réponse</strong>
+                Sous 24h
               </div>
             </div>
 
             <div class="mini-proof">
               <div class="card">
                 <strong>9:16</strong>
-                <span style="color:var(--muted);">Vidéo verticale intégrée</span>
+                <span style="color:var(--muted);">Vidéo intégrée</span>
               </div>
               <div class="card">
                 <strong>GitHub</strong>
@@ -807,7 +811,7 @@
               </div>
               <div class="card">
                 <strong>Formulaire</strong>
-                <span style="color:var(--muted);">Réception simple par e-mail</span>
+                <span style="color:var(--muted);">Réception par e-mail</span>
               </div>
             </div>
           </div>
@@ -817,7 +821,7 @@
               <input type="hidden" name="_subject" value="Nouvelle demande de devis — Colixo" />
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://example.com/merci.html" />
+              <input type="hidden" name="_next" value="https://colixo.ch/merci.html" />
 
               <div class="field-row">
                 <div>
@@ -858,8 +862,7 @@
 
               <button class="btn btn-primary" type="submit" style="width:100%;">Envoyer ma demande</button>
               <p class="form-note">
-                Remplacez <strong>info@colixo.ch</strong> par votre vraie adresse de réception dans l’attribut <code>action</code> du formulaire.
-                Remplacez aussi l’URL <code>https://example.com/merci.html</code> par une vraie page de remerciement si besoin.
+                Vérifie bien ton e-mail sur FormSubmit lors du premier envoi pour activer la réception des messages.
               </p>
             </form>
           </div>
@@ -871,9 +874,7 @@
   <footer>
     <div class="container footer-row">
       <div>© 2026 Colixo — Livraison simple, rapide, efficace.</div>
-      <div>
-        <a href="#top">Retour en haut</a>
-      </div>
+      <div><a href="#top">Retour en haut</a></div>
     </div>
   </footer>
 </body>
