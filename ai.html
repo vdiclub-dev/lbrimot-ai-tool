@@ -1,23 +1,208 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>Brimot IA Devis</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant IA devis</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #0f172a;
+      --panel-2: #111827;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --accent: #fbbf24;
+      --danger: #dc2626;
+      --text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .topbar, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .topbar {
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .brand p {
+      margin: 4px 0 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav a, button {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: #1f2937; color: white; }
+    .active-tab { background: var(--accent); color: #000; }
+
+    .card {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    label span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      background: #020617;
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 260px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #020617;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 260px;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <small>Brimot AI Tool</small>
+        <h1>Assistant IA devis</h1>
+        <p>Analyse un chantier, structure le besoin et prépare une base de devis plus lisible.</p>
+      </div>
 
-<h1>🤖 Assistant IA devis</h1>
+      <div class="nav">
+        <a class="btn-secondary" href="index.html">Dashboard</a>
+        <a class="btn-secondary" href="simulation-vehicule.html">Simulation véhicule</a>
+        <a class="btn-secondary" href="simulation-zones.html">Simulation zones</a>
+        <a class="btn-secondary active-tab" href="ai.html">Assistant IA</a>
+      </div>
+    </div>
 
-<textarea id="input" rows="6" cols="40"
-placeholder="Décris le chantier..."></textarea>
+    <div class="grid">
+      <div class="card">
+        <h2>Description du chantier</h2>
+        <p class="note">Décrivez ici le besoin client: surface, type de local, état, urgence, accès, étage, encombrants, fréquence, contraintes particulières.</p>
 
-<br>
+        <label for="input">
+          <span>Texte à analyser</span>
+          <textarea id="input" placeholder="Exemple: Appartement 4 pièces à Lausanne, 95 m2, fin de bail, très sale, vitres comprises, intervention rapide, 3e étage sans ascenseur."></textarea>
+        </label>
 
-<button onclick="analyser()">Analyser</button>
+        <div class="actions">
+          <button class="btn-primary" onclick="analyser()">Analyser</button>
+          <a class="btn-secondary" href="index.html">Retour dashboard</a>
+        </div>
+      </div>
 
-<pre id="output"></pre>
+      <div class="card">
+        <h2>Résultat</h2>
+        <p class="note">La réponse de l’assistant s’affiche ici pour vous aider à formuler le devis ou préparer un chiffrage.</p>
+        <pre id="output">En attente d’analyse...</pre>
+      </div>
+    </div>
+  </div>
 
-<script src="ai.js"></script>
-
+  <script src="ai.js"></script>
 </body>
 </html>
