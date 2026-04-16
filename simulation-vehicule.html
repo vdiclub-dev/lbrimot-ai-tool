@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation véhicule colis</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #0f172a;
+      --panel-2: #111827;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --accent: #fbbf24;
+      --accent-dark: #d97706;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --text: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .topbar, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .topbar {
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .brand small {
+      display: block;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    .brand p {
+      margin: 4px 0 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav a, button {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: #1f2937; color: white; }
+    .active-tab { background: var(--accent); color: #000; }
+    .card {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card h2, .card h3 {
+      margin-top: 0;
+    }
+    .muted { color: var(--muted); }
+    label {
+      display: block;
+      margin-bottom: 12px;
+    }
+    label span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+    input {
+      width: 100%;
+      background: #020617;
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .row > * {
+      flex: 1;
+      min-width: 180px;
+    }
+    .stat {
+      background: var(--panel-2);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+    .stat .label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .stat .value {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .breakdown-item {
+      background: #020617;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .summary-box {
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .summary-good {
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid rgba(22, 163, 74, 0.35);
+    }
+    .summary-warn {
+      background: rgba(217, 119, 6, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+    }
+    @media (max-width: 900px) {
+      .grid, .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <small>Brimot AI Tool</small>
+        <h1>Simulation véhicule colis</h1>
+        <p>Calcul du coût par km, coût par jour, rentabilité et prix mini par colis</p>
+      </div>
+      <div class="nav">
+        <a class="btn-secondary" href="index.html">Dashboard</a>
+        <a class="active-tab" href="simulation-vehicule.html">Simulation véhicule</a>
+        <a class="btn-secondary" href="ai.html">Assistant IA</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Données de calcul</h2>
+
+        <div class="row">
+          <label><span>Jours exploités / mois</span><input id="daysPerMonth" type="number" value="22" min="1"></label>
+          <label><span>Mois / année</span><input id="monthsPerYear" type="number" value="12" min="1" max="12"></label>
+          <label><span>Année</span><input id="referenceYear" type="number" value="2026" min="2024"></label>
+        </div>
+
+        <h3>Chauffeur</h3>
+        <div class="row">
+          <label><span>Salaire chauffeur brut / mois</span><input id="grossSalary" type="number" value="5000" min="0"></label>
+          <label><span>Charges sociales complémentaires %</span><input id="extraSocialRate" type="number" value="0" min="0" step="0.1"></label>
+        </div>
+        <div class="row">
+          <label><span>AVS / AI %</span><input id="avsRate" type="number" value="5.5" min="0" step="0.01"></label>
+          <label><span>Assurance chômage %</span><input id="unemploymentRate" type="number" value="1.15" min="0" step="0.01"></label>
+          <label><span>LPP %</span><input id="lppRate" type="number" value="10" min="0" step="0.01"></label>
+          <label><span>Vacances %</span><input id="vacationRate" type="number" value="10.5" min="0" step="0.01"></label>
+        </div>
+
+        <h3>Véhicule</h3>
+        <div class="row">
+          <label><span>Nombre de km / jour</span><input id="kmPerDay" type="number" value="180" min="0"></label>
+          <label><span>Leasing / mois</span><input id="leasingMonthly" type="number" value="850" min="0"></label>
+        </div>
+        <div class="row">
+          <label><span>Assurance RC véhicule / année</span><input id="vehicleInsuranceYearly" type="number" value="2400" min="0"></label>
+          <label><span>Assurance RC entreprise / année</span><input id="companyInsuranceYearly" type="number" value="1200" min="0"></label>
+          <label><span>Taxe auto / année</span><input id="taxYearly" type="number" value="900" min="0"></label>
+          <label><span>Vignette / année</span><input id="vignetteYearly" type="number" value="40" min="0"></label>
+        </div>
+
+        <h3>Entretien et diesel</h3>
+        <div class="row">
+          <label><span>Entretien total</span><input id="maintenanceCost" type="number" value="1800" min="0"></label>
+          <label><span>Entretien tous les km</span><input id="maintenanceKm" type="number" value="30000" min="1"></label>
+          <label><span>Pneus / changement</span><input id="tiresCost" type="number" value="1200" min="0"></label>
+          <label><span>Pneus changement tous les km</span><input id="tiresKm" type="number" value="30000" min="1"></label>
+        </div>
+        <div class="row">
+          <label><span>Prix diesel / litre</span><input id="dieselPrice" type="number" value="1.95" min="0" step="0.01"></label>
+          <label><span>Consommation litres / 100 km</span><input id="consumptionPer100" type="number" value="10" min="0" step="0.1"></label>
+        </div>
+
+        <h3>Colis et prix</h3>
+        <div class="row">
+          <label><span>Nombre de colis / jour</span><input id="parcelsPerDay" type="number" value="85" min="0"></label>
+          <label><span>Prix moyen facturé / colis</span><input id="pricePerParcel" type="number" value="4.5" min="0" step="0.01"></label>
+          <label><span>Objectif marge nette %</span><input id="targetMarginRate" type="number" value="15" min="0" max="95"></label>
+          <label><span>Autres frais / jour</span><input id="otherDailyCosts" type="number" value="0" min="0" step="0.01"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Résultats</h2>
+
+        <div class="stats-grid">
+          <div class="stat"><div class="label">Coût / km</div><div id="costPerKm" class="value">-</div></div>
+          <div class="stat"><div class="label">Coût / jour</div><div id="costPerDay" class="value">-</div></div>
+          <div class="stat"><div class="label">Coût / colis</div><div id="costPerParcel" class="value">-</div></div>
+          <div class="stat"><div class="label">CA / jour</div><div id="revenuePerDay" class="value">-</div></div>
+          <div class="stat"><div class="label">Résultat / jour</div><div id="profitPerDay" class="value">-</div></div>
+          <div class="stat"><div class="label">Résultat / année</div><div id="profitPerYear" class="value">-</div></div>
+        </div>
+
+        <div id="breakdown"></div>
+
+        <div id="summaryBox" class="summary-box">
+          <h3>Analyse</h3>
+          <p id="breakEvenText"></p>
+          <p id="targetText"></p>
+          <p id="summaryText"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ids = [
+      "daysPerMonth","monthsPerYear","referenceYear","grossSalary","extraSocialRate",
+      "avsRate","unemploymentRate","lppRate","vacationRate","kmPerDay","leasingMonthly",
+      "vehicleInsuranceYearly","companyInsuranceYearly","taxYearly","vignetteYearly",
+      "maintenanceCost","maintenanceKm","tiresCost","tiresKm","dieselPrice",
+      "consumptionPer100","parcelsPerDay","pricePerParcel","targetMarginRate","otherDailyCosts"
+    ];
+
+    function num(id, fallback = 0) {
+      const n = Number(document.getElementById(id).value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function chf(value) {
+      return new Intl.NumberFormat("fr-CH", {
+        style: "currency",
+        currency: "CHF",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value || 0);
+    }
+
+    function render() {
+      const daysPerMonth = Math.max(1, num("daysPerMonth", 22));
+      const monthsPerYear = Math.max(1, Math.min(12, num("monthsPerYear", 12)));
+      const grossSalary = Math.max(0, num("grossSalary"));
+      const extraSocialRate = Math.max(0, num("extraSocialRate"));
+      const avsRate = Math.max(0, num("avsRate"));
+      const unemploymentRate = Math.max(0, num("unemploymentRate"));
+      const lppRate = Math.max(0, num("lppRate"));
+      const vacationRate = Math.max(0, num("vacationRate"));
+      const kmPerDay = Math.max(0, num("kmPerDay"));
+      const leasingMonthly = Math.max(0, num("leasingMonthly"));
+      const vehicleInsuranceYearly = Math.max(0, num("vehicleInsuranceYearly"));
+      const companyInsuranceYearly = Math.max(0, num("companyInsuranceYearly"));
+      const taxYearly = Math.max(0, num("taxYearly"));
+      const vignetteYearly = Math.max(0, num("vignetteYearly"));
+      const maintenanceCost = Math.max(0, num("maintenanceCost"));
+      const maintenanceKm = Math.max(1, num("maintenanceKm", 30000));
+      const tiresCost = Math.max(0, num("tiresCost"));
+      const tiresKm = Math.max(1, num("tiresKm", 30000));
+      const dieselPrice = Math.max(0, num("dieselPrice"));
+      const consumptionPer100 = Math.max(0, num("consumptionPer100"));
+      const parcelsPerDay = Math.max(0, num("parcelsPerDay"));
+      const pricePerParcel = Math.max(0, num("pricePerParcel"));
+      const targetMarginRate = Math.max(0, Math.min(95, num("targetMarginRate")));
+      const otherDailyCosts = Math.max(0, num("otherDailyCosts"));
+
+      const daysPerYear = daysPerMonth * monthsPerYear;
+      const socialRate = extraSocialRate + avsRate + unemploymentRate + lppRate + vacationRate;
+      const chargedSalaryMonthly = grossSalary * (1 + socialRate / 100);
+      const salaryDaily = chargedSalaryMonthly / daysPerMonth;
+
+      const annualFixedVehicle =
+        (leasingMonthly * monthsPerYear) +
+        vehicleInsuranceYearly +
+        companyInsuranceYearly +
+        taxYearly +
+        vignetteYearly;
+
+      const fixedVehicleDaily = annualFixedVehicle / daysPerYear;
+      const dieselPerKm = dieselPrice * (consumptionPer100 / 100);
+      const maintenancePerKm = maintenanceCost / maintenanceKm;
+      const tiresPerKm = tiresCost / tiresKm;
+      const variablePerKm = dieselPerKm + maintenancePerKm + tiresPerKm;
+
+      const costPerDay = salaryDaily + fixedVehicleDaily + (variablePerKm * kmPerDay) + otherDailyCosts;
+      const costPerKm = kmPerDay > 0 ? costPerDay / kmPerDay : 0;
+      const costPerParcel = parcelsPerDay > 0 ? costPerDay / parcelsPerDay : 0;
+      const revenuePerDay = parcelsPerDay * pricePerParcel;
+      const profitPerDay = revenuePerDay - costPerDay;
+      const profitPerYear = profitPerDay * daysPerYear;
+      const minPricePerParcel = parcelsPerDay > 0 ? costPerDay / parcelsPerDay : 0;
+      const targetRevenuePerDay = costPerDay / (1 - targetMarginRate / 100);
+      const targetPricePerParcel = parcelsPerDay > 0 ? targetRevenuePerDay / parcelsPerDay : 0;
+
+      document.getElementById("costPerKm").textContent = chf(costPerKm);
+      document.getElementById("costPerDay").textContent = chf(costPerDay);
+      document.getElementById("costPerParcel").textContent = parcelsPerDay > 0 ? chf(costPerParcel) : "-";
+      document.getElementById("revenuePerDay").textContent = chf(revenuePerDay);
+      document.getElementById("profitPerDay").textContent = chf(profitPerDay);
+      document.getElementById("profitPerYear").textContent = chf(profitPerYear);
+
+      document.getElementById("breakdown").innerHTML = [
+        ["Salaire chargé / mois", chf(chargedSalaryMonthly)],
+        ["Salaire + charges / jour", chf(salaryDaily)],
+        ["Frais fixes véhicule / année", chf(annualFixedVehicle)],
+        ["Frais fixes véhicule / jour", chf(fixedVehicleDaily)],
+        ["Diesel / km", chf(dieselPerKm)],
+        ["Entretien / km", chf(maintenancePerKm)],
+        ["Pneus / km", chf(tiresPerKm)],
+        ["Coût variable / km", chf(variablePerKm)]
+      ].map(row => `<div class="breakdown-item"><span>${row[0]}</span><strong>${row[1]}</strong></div>`).join("");
+
+      document.getElementById("breakEvenText").textContent =
+        parcelsPerDay > 0
+          ? `Prix minimum rentable: ${chf(minPricePerParcel)} par colis`
+          : `Ajoutez un nombre de colis / jour pour calculer le prix minimum par colis.`;
+
+      document.getElementById("targetText").textContent =
+        parcelsPerDay > 0
+          ? `Prix conseillé avec ${targetMarginRate}% de marge: ${chf(targetPricePerParcel)} par colis`
+          : `Ajoutez un nombre de colis / jour pour calculer le prix conseillé par colis.`;
+
+      const box = document.getElementById("summaryBox");
+      const summary = document.getElementById("summaryText");
+
+      if (profitPerDay >= 0) {
+        box.className = "summary-box summary-good";
+        summary.textContent = `Le véhicule est rentable. Il dégage environ ${chf(profitPerDay)} par jour.`;
+      } else {
+        const extraParcels = pricePerParcel > 0 ? Math.ceil(Math.abs(profitPerDay) / pricePerParcel) : 0;
+        box.className = "summary-box summary-warn";
+        summary.textContent = pricePerParcel > 0
+          ? `Le véhicule n'est pas rentable. Il manque ${chf(Math.abs(profitPerDay))} par jour, soit environ ${extraParcels} colis de plus au prix actuel.`
+          : `Le véhicule n'est pas rentable. Il manque ${chf(Math.abs(profitPerDay))} par jour.`;
+      }
+    }
+
+    ids.forEach(id => {
+      document.getElementById(id).addEventListener("input", render);
+      document.getElementById(id).addEventListener("change", render);
+    });
+
+    render();
+  </script>
+</body>
+</html>
