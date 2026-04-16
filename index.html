@@ -70,6 +70,12 @@
       color: var(--muted);
       font-size: 14px;
     }
+<div class="nav">
+  <a class="btn-secondary active-tab" href="index.html">Dashboard</a>
+  <a class="btn-secondary" href="simulation-vehicule.html">Simulation véhicule</a>
+  <a class="btn-secondary" href="simulation-zones.html">Simulation zones</a>
+  <a class="btn-secondary" href="ai.html">Assistant IA</a>
+</div>
 
     .nav {
       display: flex;
@@ -99,6 +105,15 @@
       display: grid;
       gap: 20px;
     }
+.nav a {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}
 
     .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
