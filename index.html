@@ -51,44 +51,31 @@
       margin-bottom: 20px;
     }
 
-    .brand small {
-      display: block;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .brand p {
+       .brand p {
       margin: 4px 0 0 0;
       color: var(--muted);
       font-size: 14px;
     }
-<div class="nav">
-  <a class="btn-secondary active-tab" href="index.html">Dashboard</a>
-  <a class="btn-secondary" href="simulation-vehicule.html">Simulation véhicule</a>
-  <a class="btn-secondary" href="simulation-zones.html">Simulation zones</a>
-  <a class="btn-secondary" href="ai.html">Assistant IA</a>
-</div>
 
     .nav {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
+    .nav a,
     button {
       border: none;
       border-radius: 12px;
       padding: 10px 14px;
       cursor: pointer;
       font-weight: bold;
+    }
+
+    .nav a {
+      text-decoration: none;
+      display: inline-block;
     }
 
     .btn-primary { background: var(--accent); color: #000; }
@@ -105,6 +92,7 @@
       display: grid;
       gap: 20px;
     }
+
 .nav a {
   border: none;
   border-radius: 12px;
