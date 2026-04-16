@@ -13,32 +13,26 @@
       --border: #1e293b;
       --accent: #fbbf24;
       --danger: #dc2626;
-      --success: #16a34a;
       --text: #f8fafc;
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
-
     .container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 20px;
     }
-
     .topbar, .card {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
-
     .topbar {
       padding: 18px;
       display: flex;
@@ -48,7 +42,6 @@
       flex-wrap: wrap;
       margin-bottom: 20px;
     }
-
     .brand small {
       display: block;
       color: var(--accent);
@@ -57,25 +50,21 @@
       font-weight: bold;
       margin-bottom: 4px;
     }
-
     .brand h1 {
       margin: 0;
       font-size: 28px;
     }
-
     .brand p {
       margin: 4px 0 0 0;
       color: var(--muted);
       font-size: 14px;
     }
-
     .nav {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       align-items: center;
     }
-
     .nav a, button {
       border: none;
       border-radius: 12px;
@@ -85,35 +74,29 @@
       text-decoration: none;
       display: inline-block;
     }
-
     .btn-secondary { background: #1f2937; color: white; }
     .btn-primary { background: var(--accent); color: #000; }
     .btn-danger { background: var(--danger); color: white; }
     .active-tab { background: var(--accent); color: #000; }
-
     .card {
       padding: 20px;
       margin-bottom: 20px;
     }
-
     .row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .row > * {
       flex: 1;
       min-width: 180px;
     }
-
     label span {
       display: block;
       margin-bottom: 6px;
       font-size: 14px;
       color: #cbd5e1;
     }
-
     input {
       width: 100%;
       background: #020617;
@@ -123,17 +106,14 @@
       padding: 10px 12px;
       outline: none;
     }
-
     .table-wrap {
       overflow-x: auto;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1200px;
+      min-width: 1250px;
     }
-
     th, td {
       text-align: left;
       padding: 10px;
@@ -141,58 +121,48 @@
       font-size: 14px;
       vertical-align: middle;
     }
-
     th {
       color: var(--muted);
       text-transform: uppercase;
       font-size: 12px;
     }
-
     td input {
       min-width: 110px;
     }
-
     .stat-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 12px;
     }
-
     .stat {
       background: var(--panel-2);
       border-radius: 18px;
       padding: 16px;
       border: 1px solid var(--border);
     }
-
     .stat .label {
       color: var(--muted);
       font-size: 13px;
     }
-
     .stat .value {
       margin-top: 8px;
       font-size: 24px;
       font-weight: bold;
     }
-
     .profit {
       color: #86efac;
       font-weight: bold;
     }
-
     .loss {
       color: #fca5a5;
       font-weight: bold;
     }
-
     .note {
       color: var(--muted);
       font-size: 13px;
       margin-top: 8px;
       line-height: 1.5;
     }
-
     @media (max-width: 900px) {
       .stat-grid {
         grid-template-columns: 1fr;
@@ -206,9 +176,8 @@
       <div class="brand">
         <small>Brimot AI Tool</small>
         <h1>Simulation zones Suisse</h1>
-        <p>1 zone = 1 ou plusieurs véhicules avec rentabilité détaillée par zone et total global.</p>
+        <p>Le nombre de véhicules est calculé automatiquement sur la base de 500 km maximum par véhicule et par jour.</p>
       </div>
-
       <div class="nav">
         <a class="btn-secondary" href="index.html">Dashboard</a>
         <a class="btn-secondary" href="simulation-vehicule.html">Simulation véhicule</a>
@@ -228,19 +197,23 @@
           <input id="monthsPerYear" type="number" value="12" min="1" max="12">
         </label>
         <label>
-          <span>Coût véhicule / jour</span>
+          <span>Coût d’un véhicule / jour</span>
           <input id="baseVehicleCostDay" type="number" value="320" min="0" step="0.01">
+        </label>
+        <label>
+          <span>Capacité max km / véhicule / jour</span>
+          <input id="vehicleKmCapacity" type="number" value="500" min="1" step="1">
         </label>
         <label>
           <span>Objectif marge %</span>
           <input id="targetMarginRate" type="number" value="15" min="0" max="95">
         </label>
       </div>
-      <p class="note">Le coût véhicule / jour reprend votre base de simulation 1 véhicule. Ensuite chaque zone compare son chiffre d'affaires au coût de ses véhicules.</p>
+      <p class="note">Exemple: une zone à 900 km / jour demandera automatiquement 2 véhicules. Une zone à 1200 km / jour en demandera 3.</p>
     </div>
 
     <div class="card">
-      <div class="row" style="margin-bottom: 14px;">
+      <div class="row" style="margin-bottom:14px;">
         <button class="btn-primary" onclick="addZone()">Ajouter une zone</button>
       </div>
 
@@ -249,10 +222,10 @@
           <thead>
             <tr>
               <th>Zone</th>
-              <th>Véhicules</th>
-              <th>Km / jour / véhicule</th>
+              <th>Km totaux / jour</th>
               <th>Colis / jour</th>
               <th>Prix / colis</th>
+              <th>Véhicules requis</th>
               <th>Coût / jour</th>
               <th>Coût / km</th>
               <th>CA / jour</th>
@@ -272,6 +245,7 @@
       <div class="stat-grid">
         <div class="stat"><div class="label">Zones</div><div id="totalZones" class="value">0</div></div>
         <div class="stat"><div class="label">Véhicules</div><div id="totalVehicles" class="value">0</div></div>
+        <div class="stat"><div class="label">Km / jour</div><div id="totalKmDay" class="value">0</div></div>
         <div class="stat"><div class="label">Colis / jour</div><div id="totalParcels" class="value">0</div></div>
         <div class="stat"><div class="label">CA / jour</div><div id="totalRevenueDay" class="value">0 CHF</div></div>
         <div class="stat"><div class="label">Résultat / mois</div><div id="totalProfitMonth" class="value">0 CHF</div></div>
@@ -282,15 +256,15 @@
 
   <script>
     const defaultZones = [
-      { name: "Genève", vehicles: 1, kmPerDay: 140, parcelsPerDay: 75, pricePerParcel: 5.2 },
-      { name: "Vaud", vehicles: 1, kmPerDay: 180, parcelsPerDay: 90, pricePerParcel: 4.8 },
-      { name: "Valais", vehicles: 1, kmPerDay: 220, parcelsPerDay: 55, pricePerParcel: 6.2 },
-      { name: "Fribourg / Neuchâtel / Jura", vehicles: 1, kmPerDay: 190, parcelsPerDay: 60, pricePerParcel: 5.6 },
-      { name: "Berne / Bienne / Soleure", vehicles: 1, kmPerDay: 180, parcelsPerDay: 85, pricePerParcel: 4.9 },
-      { name: "Bâle", vehicles: 1, kmPerDay: 150, parcelsPerDay: 70, pricePerParcel: 5.1 },
-      { name: "Zurich / Argovie / Zoug", vehicles: 2, kmPerDay: 170, parcelsPerDay: 180, pricePerParcel: 4.6 },
-      { name: "Suisse centrale", vehicles: 1, kmPerDay: 170, parcelsPerDay: 58, pricePerParcel: 5.7 },
-      { name: "Tessin", vehicles: 1, kmPerDay: 210, parcelsPerDay: 45, pricePerParcel: 6.5 }
+      { name: "Genève", kmPerDay: 320, parcelsPerDay: 75, pricePerParcel: 5.2 },
+      { name: "Vaud", kmPerDay: 480, parcelsPerDay: 90, pricePerParcel: 4.8 },
+      { name: "Valais", kmPerDay: 760, parcelsPerDay: 55, pricePerParcel: 6.2 },
+      { name: "Fribourg / Neuchâtel / Jura", kmPerDay: 540, parcelsPerDay: 60, pricePerParcel: 5.6 },
+      { name: "Berne / Bienne / Soleure", kmPerDay: 470, parcelsPerDay: 85, pricePerParcel: 4.9 },
+      { name: "Bâle", kmPerDay: 390, parcelsPerDay: 70, pricePerParcel: 5.1 },
+      { name: "Zurich / Argovie / Zoug", kmPerDay: 980, parcelsPerDay: 180, pricePerParcel: 4.6 },
+      { name: "Suisse centrale", kmPerDay: 430, parcelsPerDay: 58, pricePerParcel: 5.7 },
+      { name: "Tessin", kmPerDay: 620, parcelsPerDay: 45, pricePerParcel: 6.5 }
     ];
 
     function chf(value) {
@@ -311,10 +285,10 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><input value="${zone.name}"></td>
-        <td><input type="number" value="${zone.vehicles}" min="1"></td>
         <td><input type="number" value="${zone.kmPerDay}" min="0"></td>
         <td><input type="number" value="${zone.parcelsPerDay}" min="0"></td>
         <td><input type="number" value="${zone.pricePerParcel}" min="0" step="0.01"></td>
+        <td class="vehiclesNeeded">-</td>
         <td class="costDay">-</td>
         <td class="costKm">-</td>
         <td class="revenueDay">-</td>
@@ -337,34 +311,34 @@
       return tr;
     }
 
-    function addZone(zone = { name: "Nouvelle zone", vehicles: 1, kmPerDay: 150, parcelsPerDay: 50, pricePerParcel: 5 }) {
+    function addZone(zone = { name: "Nouvelle zone", kmPerDay: 400, parcelsPerDay: 50, pricePerParcel: 5 }) {
       document.getElementById("zonesBody").appendChild(createRow(zone));
       render();
     }
 
     function render() {
       const daysPerMonth = Math.max(1, num(document.getElementById("daysPerMonth").value, 22));
-      const monthsPerYear = Math.max(1, Math.min(12, num(document.getElementById("monthsPerYear").value, 12)));
       const baseVehicleCostDay = Math.max(0, num(document.getElementById("baseVehicleCostDay").value, 320));
+      const vehicleKmCapacity = Math.max(1, num(document.getElementById("vehicleKmCapacity").value, 500));
       const targetMarginRate = Math.max(0, Math.min(95, num(document.getElementById("targetMarginRate").value, 15)));
 
       const rows = Array.from(document.querySelectorAll("#zonesBody tr"));
 
       let totalVehicles = 0;
+      let totalKmDay = 0;
       let totalParcels = 0;
       let totalRevenueDay = 0;
       let totalProfitMonth = 0;
 
       rows.forEach(tr => {
         const cells = tr.querySelectorAll("input");
-        const vehicles = Math.max(1, num(cells[1].value, 1));
-        const kmPerDay = Math.max(0, num(cells[2].value, 0));
-        const parcelsPerDay = Math.max(0, num(cells[3].value, 0));
-        const pricePerParcel = Math.max(0, num(cells[4].value, 0));
+        const kmPerDay = Math.max(0, num(cells[1].value, 0));
+        const parcelsPerDay = Math.max(0, num(cells[2].value, 0));
+        const pricePerParcel = Math.max(0, num(cells[3].value, 0));
 
-        const costPerDay = baseVehicleCostDay * vehicles;
-        const totalKmDay = kmPerDay * vehicles;
-        const costPerKm = totalKmDay > 0 ? costPerDay / totalKmDay : 0;
+        const vehiclesNeeded = Math.max(1, Math.ceil(kmPerDay / vehicleKmCapacity));
+        const costPerDay = baseVehicleCostDay * vehiclesNeeded;
+        const costPerKm = kmPerDay > 0 ? costPerDay / kmPerDay : 0;
         const revenueDay = parcelsPerDay * pricePerParcel;
         const profitDay = revenueDay - costPerDay;
         const profitMonth = profitDay * daysPerMonth;
@@ -373,6 +347,7 @@
           ? (costPerDay / (1 - targetMarginRate / 100)) / parcelsPerDay
           : 0;
 
+        tr.querySelector(".vehiclesNeeded").textContent = vehiclesNeeded;
         tr.querySelector(".costDay").textContent = chf(costPerDay);
         tr.querySelector(".costKm").textContent = chf(costPerKm);
         tr.querySelector(".revenueDay").textContent = chf(revenueDay);
@@ -390,7 +365,8 @@
             ? chf(minParcelPrice) + " / " + chf(targetParcelPrice)
             : "-";
 
-        totalVehicles += vehicles;
+        totalVehicles += vehiclesNeeded;
+        totalKmDay += kmPerDay;
         totalParcels += parcelsPerDay;
         totalRevenueDay += revenueDay;
         totalProfitMonth += profitMonth;
@@ -398,25 +374,25 @@
 
       document.getElementById("totalZones").textContent = rows.length;
       document.getElementById("totalVehicles").textContent = totalVehicles;
+      document.getElementById("totalKmDay").textContent = totalKmDay.toFixed(0);
       document.getElementById("totalParcels").textContent = totalParcels;
       document.getElementById("totalRevenueDay").textContent = chf(totalRevenueDay);
       document.getElementById("totalProfitMonth").textContent = chf(totalProfitMonth);
 
       const summary = document.getElementById("summaryText");
       if (totalProfitMonth >= 0) {
-        summary.textContent = "Le réseau Suisse est rentable au global. Dans chaque ligne, le premier prix correspond au seuil minimum de rentabilité et le second au prix conseillé avec votre marge cible.";
+        summary.textContent = "Le réseau Suisse est rentable au global. Le premier prix affiché dans chaque zone est le seuil minimum de rentabilité; le second correspond au prix conseillé avec la marge cible.";
       } else {
-        summary.textContent = "Le réseau Suisse n'est pas encore rentable au global. Ajustez le nombre de véhicules, les volumes ou le prix moyen par colis.";
+        summary.textContent = "Le réseau Suisse n'est pas encore rentable. Augmentez le prix moyen par colis, réduisez les km par zone ou regroupez certaines zones.";
       }
     }
 
     defaultZones.forEach(addZone);
     document.getElementById("daysPerMonth").addEventListener("input", render);
-    document.getElementById("monthsPerYear").addEventListener("input", render);
     document.getElementById("baseVehicleCostDay").addEventListener("input", render);
+    document.getElementById("vehicleKmCapacity").addEventListener("input", render);
     document.getElementById("targetMarginRate").addEventListener("input", render);
     render();
   </script>
 </body>
 </html>
-
